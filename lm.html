@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mallorca Library Company</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito Sans', 'Segoe UI', system-ui, sans-serif;
+            font-weight: 300;
+            overflow-x: hidden;
+            cursor: none;
+            animation: bgShift 15s ease infinite;
+        }
+
+        @keyframes bgShift {
+            0%, 100% { background: radial-gradient(ellipse at center, #E6E6FA 0%, #FFFFFF 40%, #e0be77 100%); }
+            50% { background: radial-gradient(ellipse at center, #fff9ff 0%, #FFFFFF 45%, #e0be77 100%); }
+        }
+
+        .top-bar {
+            background: white;
+            padding: 20px 40px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2c3e50;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-options {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #e87223 0%, #e1b24b 100%);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.5);
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 80px 20px;
+            animation: fadeInUp 1s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-title {
+            font-size: 72px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            animation: textGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes textGlow {
+            0%, 100% { text-shadow: 2px 2px 4px rgba(0,0,0,0.1); }
+            50% { text-shadow: 2px 2px 20px rgba(102, 126, 234, 0.5); }
+        }
+
+        .library-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            padding: 60px 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .library-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            animation: slideIn 0.8s ease forwards;
+            opacity: 0;
+        }
+
+        .library-card:nth-child(1) { animation-delay: 0.1s; }
+        .library-card:nth-child(2) { animation-delay: 0.2s; }
+        .library-card:nth-child(3) { animation-delay: 0.3s; }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .library-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+
+        .library-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .library-card:hover .library-image {
+            transform: scale(1.1);
+        }
+
+        .library-info {
+            padding: 30px;
+        }
+
+        .library-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .library-history {
+            color: #7f8c8d;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        .chart-section {
+            padding: 60px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            animation: fadeIn 1s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .chart-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            position: relative;
+            background: white;
+            width: 90%;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 40px;
+            border-radius: 20px;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 30px;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .footer {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 60px 40px;
+            margin-top: 100px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 20px;
+            font-size: 20px;
+            color: #fff;
+        }
+
+        .footer-section p, .footer-section a {
+            color: #bdc3c7;
+            text-decoration: none;
+            line-height: 1.8;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: #fff;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 10px;
+            animation: countUp 2s ease;
+        }
+
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <div class="top-bar">
+        <div class="logo">mallorca lib co.</div>
+        <div class="nav-options">
+            <button class="nav-btn" onclick="openModal('member')">New Member</button>
+            <button class="nav-btn" onclick="openModal('borrow')">Borrow</button>
+            <button class="nav-btn" onclick="openModal('fine')">Pay Fine</button>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <h1 class="hero-title">Mallorca: the new idea haven!</h1>
+    </div>
+
+    <!-- Statistics -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-number" data-target="12500">30,000</div>
+            <div class="stat-label">Active Members</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" data-target="85000">120,000</div>
+            <div class="stat-label">Books Available</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" data-target="156">5,000+</div>
+            <div class="stat-label">Daily Visitors</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" data-target="8">5</div>
+            <div class="stat-label">Branch Locations</div>
+        </div>
+    </div>
+
+    <!-- Library Showcase -->
+    <div class="library-showcase">
+        <div class="library-card">
+            <img src="1c.jpg" alt="Historic Reading Room" class="library-image">
+            <div class="library-info">
+                <h3 class="library-name">The Grand Reading Hall</h3>
+                <p class="library-history">
+                    Established in 1895, this magnificent hall features soaring 40-foot ceilings adorned with hand-painted murals. The original oak shelving still houses our rare manuscript collection, while modern climate control ensures preservation for future generations. Over 2 million scholars have studied within these hallowed walls.
+                </p>
+            </div>
+        </div>
+        
+        <div class="library-card">
+            <img src="1b.jpg" alt="Classic Library Interior" class="library-image">
+            <div class="library-info">
+                <h3 class="library-name">The Heritage Wing</h3>
+                <p class="library-history">
+                    Built in 1902 as an expansion to accommodate the growing collection, the Heritage Wing showcases Beaux-Arts architecture with its distinctive copper dome. Home to over 50,000 first editions and the city's most extensive genealogy archive, it remains a testament to early 20th-century craftsmanship.
+                </p>
+            </div>
+        </div>
+        
+        <div class="library-card">
+            <img src="1a.jpg" alt="Victorian Library" class="library-image">
+            <div class="library-info">
+                <h3 class="library-name">The Victorian Archives</h3>
+                <p class="library-history">
+                    Originally a private collection donated in 1888, this section preserves the literary legacy of the Gilded Age. The restored gas lamp fixtures now house LED bulbs, maintaining historical ambiance while protecting delicate materials. It contains the region's largest collection of 19th-century periodicals.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Chart Section -->
+    <div class="chart-section">
+        <div class="chart-container">
+            <h2 class="chart-title">Monthly Visitors Across All Branches</h2>
+            <canvas id="visitorChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="memberModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('member')">&times;</span>
+            <h2 style="margin-bottom: 30px; color: #2c3e50;">New Member Registration</h2>
+            <form onsubmit="handleSubmit(event, 'member')">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" required placeholder="Enter your full name">
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" required placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" required placeholder="Enter your phone number">
+                </div>
+                <div class="form-group">
+                    <label>Membership Type</label>
+                    <select required>
+                        <option value="">Select membership type</option>
+                        <option value="student">Student ($25/year)</option>
+                        <option value="adult">Adult ($50/year)</option>
+                        <option value="senior">Senior ($30/year)</option>
+                        <option value="family">Family ($100/year)</option>
+                    </select>
+                </div>
+                <button type="submit" class="submit-btn">Register Member</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="borrowModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('borrow')">&times;</span>
+            <h2 style="margin-bottom: 30px; color: #2c3e50;">Borrow Book</h2>
+            <form onsubmit="handleSubmit(event, 'borrow')">
+                <div class="form-group">
+                    <label>Member ID</label>
+                    <input type="text" required placeholder="Enter your member ID">
+                </div>
+                <div class="form-group">
+                    <label>Book ISBN</label>
+                    <input type="text" required placeholder="Enter book ISBN">
+                </div>
+                <div class="form-group">
+                    <label>Book Title</label>
+                    <input type="text" required placeholder="Enter book title">
+                </div>
+                <div class="form-group">
+                    <label>Borrow Duration</label>
+                    <select required>
+                        <option value="">Select duration</option>
+                        <option value="7">1 Week</option>
+                        <option value="14">2 Weeks</option>
+                        <option value="21">3 Weeks</option>
+                        <option value="30">1 Month</option>
+                    </select>
+                </div>
+                <button type="submit" class="submit-btn">Confirm Borrowing</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="fineModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('fine')">&times;</span>
+            <h2 style="margin-bottom: 30px; color: #2c3e50;">Pay Fine</h2>
+            <form onsubmit="handleSubmit(event, 'fine')">
+                <div class="form-group">
+                    <label>Member ID</label>
+                    <input type="text" required placeholder="Enter your member ID">
+                </div>
+                <div class="form-group">
+                    <label>Fine Amount ($)</label>
+                    <input type="number" step="0.01" required placeholder="Enter fine amount">
+                </div>
+                <div class="form-group">
+                    <label>Payment Method</label>
+                    <select required>
+                        <option value="">Select payment method</option>
+                        <option value="card">Credit/Debit Card</option>
+                        <option value="cash">Cash</option>
+                        <option value="check">Check</option>
+                        <option value="online">Online Banking</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Reason for Fine</label>
+                    <input type="text" placeholder="Late return, damaged book, etc.">
+                </div>
+                <button type="submit" class="submit-btn">Process Payment</button>
+            </form>
+        </div>
