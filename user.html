@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Member Enrollment - Mallorca Library</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600&family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito Sans', 'Segoe UI', system-ui, sans-serif;
+            font-weight: 300;
+            overflow-x: hidden;
+            animation: bgShift 15s ease infinite;
+            min-height: 100vh;
+        }
+
+        @keyframes bgShift {
+            0%, 100% { background: radial-gradient(ellipse at center, #E6E6FA 0%, #FFFFFF 40%, #e0be77 100%); }
+            50% { background: radial-gradient(ellipse at center, #fff9ff 0%, #FFFFFF 45%, #e0be77 100%); }
+        }
+
+        .top-bar {
+            background: white;
+            padding: 20px 40px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2c3e50;
+            letter-spacing: -0.5px;
+            cursor: pointer;
+        }
+
+        .nav-options {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #e87223 0%, #e1b24b 100%);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(232, 114, 35, 0.3);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(232, 114, 35, 0.5);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 60px 20px 40px;
+            animation: fadeInUp 1s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-title {
+            font-size: 56px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            color: #7f8c8d;
+            font-weight: 400;
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 40px;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 968px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            animation: slideIn 0.8s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #e87223;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 14px;
+        }
+
+        .required {
+            color: #e74c3c;
+            font-weight: 700;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            font-family: 'Nunito Sans', sans-serif;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #e87223;
+            box-shadow: 0 0 0 3px rgba(232, 114, 35, 0.1);
+        }
+
+        .form-group input.error {
+            border-color: #e74c3c;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .form-group input.error + .error-message {
+            display: block;
+        }
+
+        .limit-selector {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .limit-btn {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #e87223;
+            background: white;
+            color: #e87223;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .limit-btn:hover {
+            background: #e87223;
+            color: white;
+        }
+
+        .limit-display {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2c3e50;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .membership-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .membership-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .membership-card:hover {
+            border-color: #e87223;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .membership-card.selected {
+            border-color: #e87223;
+            background: linear-gradient(135deg, rgba(232,114,35,0.05) 0%, rgba(225,178,75,0.05) 100%);
+        }
+
+        .membership-card input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .membership-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .membership-price {
+            color: #e87223;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .membership-desc {
+            color: #7f8c8d;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #e87223 0%, #e1b24b 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(232, 114, 35, 0.4);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .info-card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .benefit-list {
+            list-style: none;
+        }
+
+        .benefit-list li {
+            padding: 10px 0;
+            color: #7f8c8d;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .benefit-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .preview-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .preview-card.show {
+            display: block;
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card-header {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .card-name {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .card-id {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .progress-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .progress-step:not(:last-child):after {
+            content: "";
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background: #e0e0e0;
+            z-index: -1;
+        }
+
+        .progress-step.active:not(:last-child):after {
+            background: #e87223;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+        }
+
+        .progress-step.active .step-circle {
+            background: #e87223;
+        }
+
+        .progress-step.completed .step-circle {
+            background: #27ae60;
+        }
+
+        .step-label {
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+            animation: slideDown 0.5s ease;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #e87223;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #7f8c8d;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <div class="top-bar">
+        <div class="logo" onclick="window.location.href='/'">mallorca lib co.</div>
+        <div class="nav-options">
+            <button class="nav-btn active">New Member</button>
+            <button class="nav-btn" onclick="window.location.href='/borrow'">Borrow</button>
+            <button class="nav-btn" onclick="window.location.href='/fine'">Pay Fine</button>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <h1 class="hero-title">Join Our Literary Community</h1>
+        <p class="hero-subtitle">Become a member and unlock access to over 120,000 books and resources</p>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Success Message -->
+        <div id="successMessage" class="success-message">
+            <h3>🎉 Registration Successful!</h3>
+            <p>Welcome to Mallorca Library! Your member ID is: <strong id="newMemberId"></strong></p>
+            <p>You will receive a confirmation email shortly with your library card details.</p>
+        </div>
+
+        <div class="content-grid">
+            <!-- Registration Form -->
+            <div class="form-section">
+                <h2 class="section-title">Member Registration Form</h2>
+                
+                <!-- Progress Bar -->
+                <div class="progress-bar">
+                    <div class="progress-step active" id="step1">
+                        <div class="step-circle">1</div>
+                        <div class="step-label">Personal Info</div>
+                    </div>
+                    <div class="progress-step" id="step2">
+                        <div class="step-circle">2</div>
+                        <div class="step-label">Membership</div>
+                    </div>
+                    <div class="progress-step" id="step3">
+                        <div class="step-circle">3</div>
+                        <div class="step-label">Confirm</div>
+                    </div>
+                </div>
+
+                <form id="memberForm" novalidate>
+                    <!-- Personal Information -->
+                    <div class="form-group">
+                        <label for="name">Full Name <span class="required">*</span></label>
+                        <input type="text" id="name" name="name" required placeholder="Enter your full name">
+                        <span class="error-message">Please enter your full name</span>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email">Email Address <span class="required">*</span></label>
+                            <input type="email" id="email" name="email" required placeholder="email@example.com">
+                            <span class="error-message">Please enter a valid email</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number <span class="required">*</span></label>
+                            <input type="tel" id="phone" name="phone_number" required placeholder="(555) 123-4567">
+                            <span class="error-message">Please enter a valid phone number</span>
+                        </div>
+                    </div>
+
+                    <!-- Additional Information -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="dob">Date of Birth</label>
+                            <input type="date" id="dob" name="dob">
+                        </div>
+                        <div class="form-group">
+                            <label for="occupation">Occupation</label>
+                            <input type="text" id="occupation" name="occupation" placeholder="e.g., Student, Teacher">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        <textarea id="address" name="address" rows="3" placeholder="Enter your full address"></textarea>
+                    </div>
+
+                    <!-- Membership Type -->
+                    <div class="form-group">
+                        <label>Membership Type <span class="required">*</span></label>
+                        <div class="membership-options">
+                            <div class="membership-card" onclick="selectMembership(this, 'student')">
+                                <input type="radio" name="membership" value="student" id="student">
+                                <div class="membership-title">Student</div>
+                                <div class="membership-price">$25/year</div>
+                                <div class="membership-desc">Valid student ID required</div>
+                            </div>
+                            <div class="membership-card" onclick="selectMembership(this, 'adult')">
+                                <input type="radio" name="membership" value="adult" id="adult">
+                                <div class="membership-title">Adult</div>
+                                <div class="membership-price">$50/year</div>
+                                <div class="membership-desc">Ages 18-64</div>
+                            </div>
+                            <div class="membership-card" onclick="selectMembership(this, 'senior')">
+                                <input type="radio" name="membership" value="senior" id="senior">
+                                <div class="membership-title">Senior</div>
+                                <div class="membership-price">$30/year</div>
+                                <div class="membership-desc">Ages 65+</div>
+                            </div>
+                            <div class="membership-card" onclick="selectMembership(this, 'family')">
+                                <input type="radio" name="membership" value="family" id="family">
+                                <div class="membership-title">Family</div>
+                                <div class="membership-price">$100/year</div>
+                                <div class="membership-desc">Up to 4 members</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Book Issue Limit -->
+                    <div class="form-group">
+                        <label for="issueLimit">Maximum Book Issue Limit</label>
+                        <div class="limit-selector">
+                            <button type="button" class="limit-btn" onclick="decreaseLimit()">-</button>
+                            <div class="limit-display" id="limitDisplay">5</div>
+                            <button type="button" class="limit-btn" onclick="increaseLimit()">+</button>
+                            <input type="hidden" id="max_issue_limit" name="max_issue_limit" value="5">
+                            <span style="margin-left: 20px; color: #7f8c8d; font-size: 14px;">
+                                (Default: 5 books, Max: 10 books)
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Terms and Conditions -->
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; cursor: pointer;">
+                            <input type="checkbox" id="terms" style="width: auto; margin-right: 10px;" required>
+                            I agree to the library's terms and conditions and borrowing policies
+                        </label>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="submitBtn">Complete Registration</button>
+                </form>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Benefits Card -->
+                <div class="info-card">
+                    <h3>📚 Member Benefits</h3>
+                    <ul class="benefit-list">
+                        <li>Borrow up to 10 books simultaneously</li>
+                        <li>Access to digital library resources</li>
+                        <li>Free WiFi at all branches</li>
+                        <li>Priority event registration</li>
+                        <li>Extended borrowing periods</li>
+                        <li>Access to study rooms</li>
+                        <li>Monthly newsletter</li>
+                    </ul>
+                </div>
+
+                <!-- Library Stats -->
+                <div class="info-card">
+                    <h3>📊 Library Statistics</h3>
+                    <div class="stats-row">
+                        <div class="stat-item">
+                            <div class="stat-number">120K+</div>
+                            <div class="stat-label">Books</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">30K+</div>
+                            <div class="stat-label">Members</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">5</div>
+                            <div class="stat-label">Branches</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">500+</div>
+                            <div class="stat-label">Events/Year</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Member Card Preview -->
+                <div class="preview-card" id="cardPreview">
+                    <div class="card-header">MALLORCA LIBRARY MEMBER</div>
+                    <div class="card-name" id="previewName">-</div>
+                    <div class="card-id">Member ID: <span id="previewId">PENDING</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentLimit = 5;
+        let formData = {};
+
+        // Phone number formatting
+        document.getElementById('phone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 6) {
+                value = `(${value.slice(0, 3)}) ${value.slice(3, 6)}-${value.slice(6, 10)}`;
+            } else if (value.length >= 3) {
+                value = `(${value.slice(0, 3)}) ${value.slice(3)}`;
+            }
+            e.target.value = value;
+        });
+
+        // Membership selection
+        function selectMembership(card, type) {
+            document.querySelectorAll('.membership-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            document.getElementById(type).checked = true;
+            updateProgress();
+        }
+
+        // Book limit controls
+        function increaseLimit() {
+            if (currentLimit < 10) {
+                currentLimit++;
+                updateLimitDisplay();
+            }
+        }
+
+        function decreaseLimit() {
+            if (currentLimit > 1) {
+                currentLimit--;
+                updateLimitDisplay();
+            }
+        }
+
+        function updateLimitDisplay() {
+            document.getElementById('limitDisplay').textContent = currentLimit;
+            document.getElementById('max_issue_limit').value = currentLimit;
+        }
+
+        // Real-time validation
+        document.getElementById('name').addEventListener('input', function() {
+            validateField(this);
+            updateCardPreview();
+        });
+
+        document.getElementById('email').addEventListener('input', function() {
+            validateEmail(this);
+            updateCardPreview();
+        });
+
+        document.getElementById('phone').addEventListener('input', function() {
+            validatePhone(this);
+        });
+
+        function validateField(field) {
+            if (field.value.trim() === '') {
+                field.classList.add('error');
+                return false;
+            } else {
+                field.classList.remove('error');
+                return true;
+            }
+        }
+
+        function validateEmail(field) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(field.value)) {
+                field.classList.add('error');
+                return false;
+            } else {
+                field.classList.remove('error');
+                return true;
+            }
+        }
+
+        function validatePhone(field) {
+            const phoneValue = field.value.replace(/\D/g, '');
+            if (phoneValue.length < 10) {
+                field.classList.add('error');
+                return false;
+            } else {
+                field.classList.remove('error');
+                return true;
+            }
+        }
+
+        // Update member card preview
+        function updateCardPreview() {
+            const name = document.getElementById('name').value;
+            if (name) {
+                document.getElementById('cardPreview').classList.add('show');
+                document.getElementById('previewName').textContent = name.toUpperCase();
+            } else {
+                document.getElementById('cardPreview').classList.remove('show');
+            }
+        }
+
+        // Progress bar update
+        function updateProgress() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const membership = document.querySelector('input[name="membership"]:checked');
+            
+            // Step 1: Personal Info
+            if (name && email && phone) {
+                document.getElementById('step1').classList.add('completed');
+                document.getElementById('step2').classList.add('active');
+            } else {
+                document.getElementById('step1').classList.remove('completed');
+                document.getElementById('step2').classList.remove('active');
+            }
+            
+            // Step 2: Membership
+            if (membership) {
+                document.getElementById('step2').classList.add('completed');
+                document.getElementById('step3').classList.add('active');
+            } else {
+                document.getElementById('step2').classList.remove('completed');
+                document.getElementById('step3').classList.remove('active');
+            }
+        }
+
+        // Monitor all inputs for progress
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('change', updateProgress);
+        });
+
+        // Form submission
+        document.getElementById('memberForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validate required fields
+            const name = document.getElementById('name');
+            const email = document.getElementById('email');
+            const phone = document.getElementById('phone');
+            const membership = document.querySelector('input[name="membership"]:checked');
+            const terms = document.getElementById('terms').checked;
+            
+            let isValid = true;
+            
+            if (!validateField(name)) isValid = false;
+            if (!validateEmail(email)) isValid = false;
+            if (!validatePhone(phone)) isValid = false;
+            
+            if (!membership) {
+                alert('Please select a membership type');
+                isValid = false;
+            }
+            
+            if (!terms) {
+                alert('Please agree to the terms and conditions');
+                isValid = false;
+            }
+            
+            if (isValid) {
+                // Generate member ID (in production, this would come from the database)
+                const memberId = 'MLC' + Date.now().toString().slice(-6);
+                
+                // Collect form data
+                formData = {
+                    member_id: memberId,
+                    name: name.value,
+                    email: email.value,
+                    phone_number: phone.value,
+                    max_issue_limit: currentLimit,
+                    membership_type: membership.value,
+                    address: document.getElementById('address').value,
+                    dob: document.getElementById('dob').value,
+                    occupation: document.getElementById('occupation').value,
+                    registration_date: new Date().toISOString()
+                };
+                
+                // Simulate API call
+                setTimeout(() => {
+                    // Show success message
+                    document.getElementById('newMemberId').textContent = memberId;
+                    document.getElementById('successMessage').classList.add('show');
+                    
+                    // Update progress to completed
+                    document.getElementById('step3').classList.add('completed');
+                    
+                    // Scroll to top
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    
+                    // Reset form after delay
+                    setTimeout(() => {
+                        this.reset();
+                        currentLimit = 5;
+                        updateLimitDisplay();
+                        document.querySelectorAll('.membership-card').forEach(c => c.classList.remove('selected'));
+                        document.getElementById('cardPreview').classList.remove('show');
+                        updateProgress();
+                    }, 3000);
+                    
+                    console.log('Member registered:', formData);
+                }, 1000);
+            }
+        });
+
+        // Initialize
+        updateLimitDisplay();
+    </script>
+</body>
+</html>
