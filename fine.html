@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pay Fine - Mallorca Library Company</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito Sans', 'Segoe UI', system-ui, sans-serif;
+            font-weight: 300;
+            overflow-x: hidden;
+            animation: bgShift 15s ease infinite;
+            min-height: 100vh;
+        }
+
+        @keyframes bgShift {
+            0%, 100% { background: radial-gradient(ellipse at center, #E6E6FA 0%, #FFFFFF 40%, #e0be77 100%); }
+            50% { background: radial-gradient(ellipse at center, #fff9ff 0%, #FFFFFF 45%, #e0be77 100%); }
+        }
+
+        .top-bar {
+            background: white;
+            padding: 20px 40px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2c3e50;
+            letter-spacing: -0.5px;
+            cursor: pointer;
+        }
+
+        .nav-options {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #e87223 0%, #e1b24b 100%);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(232, 114, 35, 0.3);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(232, 114, 35, 0.5);
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-section, .result-section {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #2c3e50;
+            font-size: 15px;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            font-family: 'Nunito Sans', sans-serif;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .result-section {
+            position: sticky;
+            top: 120px;
+            height: fit-content;
+        }
+
+        .result-empty {
+            text-align: center;
+            color: #95a5a6;
+            padding: 60px 20px;
+        }
+
+        .result-empty-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        .result-content {
+            display: none;
+        }
+
+        .result-content.active {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .result-item {
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .result-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+
+        .result-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .result-total {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .result-total-label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .result-total-value {
+            font-size: 48px;
+            font-weight: 700;
+        }
+
+        .success-message {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+            animation: pulse 2s ease infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .info-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #856404;
+        }
+
+        @media (max-width: 968px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .result-section {
+                position: relative;
+                top: 0;
+            }
+        }
+
+        .receipt-number {
+            font-size: 12px;
+            color: #95a5a6;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .payment-icon {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            line-height: 30px;
+            text-align: center;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <div class="top-bar">
+        <div class="logo" onclick="window.location.href='index.html'">mallorca lib co.</div>
+        <div class="nav-options">
+            <button class="nav-btn" onclick="window.location.href='index.html'">Home</button>
+            <button class="nav-btn" onclick="window.location.href='borrow.html'">Borrow</button>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <!-- Form Section -->
+        <div class="form-section">
+            <h2 class="section-title">
+                <span class="payment-icon">$</span>
+                Pay Fine
+            </h2>
+            
+            <div class="info-box">
+                💡 <strong>Late Return Policy:</strong> Fines are $0.50 per day for regular books and $1.00 per day for reference materials.
+            </div>
+
+            <form id="fineForm">
+                <div class="form-group">
+                    <label>Member ID *</label>
+                    <input type="text" id="memberId" required placeholder="e.g., MLC-12345">
+                </div>
+
+                <div class="form-group">
+                    <label>Member Name *</label>
+                    <input type="text" id="memberName" required placeholder="Enter your full name">
+                </div>
+
+                <div class="form-group">
+                    <label>Book Title / ISBN</label>
+                    <input type="text" id="bookTitle" placeholder="Optional - for reference">
+                </div>
+
+                <div class="form-group">
+                    <label>Fine Amount ($) *</label>
+                    <input type="number" id="fineAmount" step="0.01" min="0.01" required placeholder="0.00">
+                </div>
+
+                <div class="form-group">
+                    <label>Payment Method *</label>
+                    <select id="paymentMethod" required>
+                        <option value="">Select payment method</option>
+                        <option value="Credit Card">Credit Card</option>
+                        <option value="Debit Card">Debit Card</option>
+                        <option value="Cash">Cash</option>
+                        <option value="Check">Check</option>
+                        <option value="Online Banking">Online Banking</option>
+                        <option value="Mobile Payment">Mobile Payment</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Reason for Fine *</label>
+                    <select id="fineReason" required>
+                        <option value="">Select reason</option>
+                        <option value="Late Return">Late Return</option>
+                        <option value="Damaged Book">Damaged Book</option>
+                        <option value="Lost Book">Lost Book</option>
+                        <option value="Missing Pages">Missing Pages</option>
+                        <option value="Overdue Renewal">Overdue Renewal</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Additional Notes</label>
+                    <textarea id="notes" placeholder="Any additional information..."></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">Process Payment</button>
+            </form>
+        </div>
+
+        <!-- Result Section -->
+        <div class="result-section">
+            <h2 class="section-title">Payment Summary</h2>
+            
+            <div class="result-empty" id="resultEmpty">
+                <div class="result-empty-icon">📋</div>
+                <p>Fill out the form to see your payment summary</p>
+            </div>
+
+            <div class="result-content" id="resultContent">
+                <div class="result-item">
+                    <div class="result-label">Member ID</div>
+                    <div class="result-value" id="displayMemberId">-</div>
+                </div>
+
+                <div class="result-item">
+                    <div class="result-label">Member Name</div>
+                    <div class="result-value" id="displayMemberName">-</div>
+                </div>
+
+                <div class="result-item">
+                    <div class="result-label">Book/ISBN</div>
+                    <div class="result-value" id="displayBookTitle">-</div>
+                </div>
+
+                <div class="result-item">
+                    <div class="result-label">Reason</div>
+                    <div class="result-value" id="displayReason">-</div>
+                </div>
+
+                <div class="result-item">
+                    <div class="result-label">Payment Method</div>
+                    <div class="result-value" id="displayPayment">-</div>
+                </div>
+
+                <div class="result-total">
+                    <div class="result-total-label">Total Amount</div>
+                    <div class="result-total-value" id="displayAmount">$0.00</div>
+                </div>
+
+                <div class="success-message" id="successMessage" style="display: none;">
+                    ✓ Payment Processed Successfully!
+                    <div class="receipt-number" id="receiptNumber"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('fineForm');
+        const resultEmpty = document.getElementById('resultEmpty');
+        const resultContent = document.getElementById('resultContent');
+        const successMessage = document.getElementById('successMessage');
+
+        // Live update on form input
+        const formInputs = form.querySelectorAll('input, select, textarea');
+        formInputs.forEach(input => {
+            input.addEventListener('input', updateLivePreview);
+        });
+
+        function updateLivePreview() {
+            const memberId = document.getElementById('memberId').value;
+            const memberName = document.getElementById('memberName').value;
+            const bookTitle = document.getElementById('bookTitle').value;
+            const fineAmount = document.getElementById('fineAmount').value;
+            const paymentMethod = document.getElementById('paymentMethod').value;
+            const fineReason = document.getElementById('fineReason').value;
+
+            // Check if form has any data
+            if (memberId || memberName || fineAmount || paymentMethod || fineReason) {
+                resultEmpty.style.display = 'none';
+                resultContent.classList.add('active');
+                successMessage.style.display = 'none';
+
+                // Update display values
+                document.getElementById('displayMemberId').textContent = memberId || '-';
+                document.getElementById('displayMemberName').textContent = memberName || '-';
+                document.getElementById('displayBookTitle').textContent = bookTitle || 'Not specified';
+                document.getElementById('displayReason').textContent = fineReason || '-';
+                document.getElementById('displayPayment').textContent = paymentMethod || '-';
+                
+                const amount = parseFloat(fineAmount) || 0;
+                document.getElementById('displayAmount').textContent = '$' + amount.toFixed(2);
+            } else {
+                resultEmpty.style.display = 'block';
+                resultContent.classList.remove('active');
+            }
+        }
+
+        // Form submission
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Generate receipt number
+            const receiptNum = 'RCP-' + Date.now().toString().slice(-8);
+            document.getElementById('receiptNumber').textContent = 'Receipt #: ' + receiptNum;
+            
+            // Show success message
+            successMessage.style.display = 'block';
+            
+            // Optional: Reset form after 3 seconds
+            setTimeout(() => {
+                if (confirm('Payment processed! Would you like to process another payment?')) {
+                    form.reset();
+                    resultEmpty.style.display = 'block';
+                    resultContent.classList.remove('active');
+                    successMessage.style.display = 'none';
+                }
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
